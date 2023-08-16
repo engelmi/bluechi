@@ -26,10 +26,9 @@ jobs:
         with:
           submodules: 'false'
 
-      - name: Check podman
+      - name: Install buildah
         run: |
-          dnf install -y podman
-          podman -v
+          dnf install -y buildah
       
       - name: Buildah Action
         id: build-image
