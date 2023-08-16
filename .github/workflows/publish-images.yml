@@ -26,13 +26,22 @@ jobs:
         with:
           submodules: 'false'
 
-      - name: Check podman
-        run: |
-          dnf install -y podman
-          podman -v
+      - name: Buildah Action
+        id: build-image
+        uses: redhat-actions/buildah-build@v2
+        with:
+          image: build-base
+          tags: latest
+          platforms: linux/amd64, linux/arm64
+          containerfiles: |
+            ./tests/container/build-base
       
-      - name: Build and push build-base
-        run: |
-          podman build --no-cache --platform linux/amd64,linux/arm64 -f tests/containers/build-base --manifest quay.io/bluechi/build-base .
-          
-
+      - name: Push To quay.io
+        id: push-to-quay
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          image: ${{ steps.build-image.outputs.image }}
+          tags: ${{ steps.build-image.outputs.tags }}
+          registry: quay.io/bluechi
+          username: ${{ secrets.BLUECHI_QUAY_USER }}
+          password: ${{ secrets.BLUECHI_QUAY_PASSWORD }}
