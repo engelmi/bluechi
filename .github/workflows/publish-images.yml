@@ -26,6 +26,11 @@ jobs:
         with:
           submodules: 'false'
 
+      - name: Check podman
+        run: |
+          dnf install -y podman
+          podman -v
+      
       - name: Buildah Action
         id: build-image
         uses: redhat-actions/buildah-build@v2
