@@ -28,4 +28,11 @@ jobs:
 
       - name: Check podman
         run: |
+          dnf install -y podman
           podman -v
+      
+      - name: Build and push build-base
+        run: |
+          podman build --no-cache --platform linux/amd64,linux/arm64 -f tests/containers/build-base --manifest quay.io/bluechi/build-base .
+          
+
