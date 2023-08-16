@@ -1,0 +1,31 @@
+name: Publish container images
+
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        description: 'The type of image to '
+        type: choice
+        options:
+        - all
+        - build-base
+        - integration-test-base
+        required: true
+
+
+jobs:
+  pypipublish:
+    name: Publish bluechi on PyPi
+    runs-on: ubuntu-latest
+    container:
+      image: quay.io/hirte/build-base:latest
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v3
+        with:
+          submodules: 'false'
+
+      - name: Check podman
+        run: |
+          podman -v
