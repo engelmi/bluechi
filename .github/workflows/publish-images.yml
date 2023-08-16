@@ -38,7 +38,7 @@ jobs:
           tags: latest
           platforms: linux/amd64, linux/arm64
           containerfiles: |
-            ./tests/container/build-base
+            ./tests/containers/build-base
       
       - name: Push To quay.io
         id: push-to-quay
