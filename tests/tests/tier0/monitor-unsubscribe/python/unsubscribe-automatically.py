@@ -32,8 +32,11 @@ class TestUnsubscribe(unittest.TestCase):
 
         node_foo = Node(node_name_foo)
 
+        sub_id = self.monitor.subscribe(node_name_foo + "sa", service_simple)
+        self.monitor.unsubscribe(sub_id)
+
         # create subscription, start unit and run event loop till removed signal is received
-        sub_id = self.monitor.subscribe(node_name_foo, service_simple)
+        sub_id = self.monitor.subscribe(node_name_foo, service_simple + "asdf")
         assert node_foo.start_unit(service_simple, "replace") != ""
         self.loop.run()
 
