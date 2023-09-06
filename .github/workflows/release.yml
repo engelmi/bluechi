@@ -22,7 +22,7 @@ jobs:
       - name: Create source tarball
         run: |
           mkdir bluechi-${{ github.ref_name }}
-          cp -r ./ bluechi-${{ github.ref_name }}
+          cp -r ./ ./bluechi-${{ github.ref_name }}/
           rm -rf ./bluechi-${{ github.ref_name }}/.git/
 
           zip -r bluechi-${{ github.ref_name }}.zip bluechi-${{ github.ref_name }}/
@@ -33,7 +33,7 @@ jobs:
         if: startsWith(github.ref_name, 'refs/tags/')
         with:
           generate_release_notes: true
-          prerelease: false
+          prerelease: true
           draft: true
           files: |
             meson_options.txt
