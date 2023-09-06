@@ -22,14 +22,19 @@ jobs:
           submodules: 'true'
       
       # ${{ github.ref_name }}
-      - name: Create source tarball
+      - name: Create source zip and tarball
         run: |
           mkdir -p /tmp/bluechi
           cp -r ./ /tmp/bluechi/
           rm -rf /tmp/bluechi/.git/
+          mv /tmp/bluechi/ ./ 
 
           zip -r bluechi.zip /tmp/bluechi/
           tar czf bluechi.tar.gz /tmp/bluechi/
+      
+      - name: Build source rpm
+        run: |
+          ./build-scripts/build-srpm.sh
 
       - name: Release
         uses: softprops/action-gh-release@v1
@@ -41,7 +46,6 @@ jobs:
           repository: engelmi/bluechi
           token: ${{ secrets.PAT_CREATE_RELEASE }}
           files: |
-            meson_options.txt
-            Makefile
             bluechi.zip
             bluechi.tar.gz
+            rpmbuild/SRPMS/*.src.rpm
