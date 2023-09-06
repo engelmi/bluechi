@@ -1,9 +1,11 @@
 name: Release BlueChi
 
 on:
-  push:
-    tags:
-      - 'v*.*.*'
+  #push:
+  #  tags:
+  #    - 'v*.*.*'
+  pull_requests:
+
 
 jobs:
   release:
@@ -35,6 +37,7 @@ jobs:
           generate_release_notes: true
           prerelease: true
           draft: true
+          repository: engelmi/bluechi
           files: |
             meson_options.txt
             Makefile
