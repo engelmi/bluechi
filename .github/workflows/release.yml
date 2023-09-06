@@ -21,12 +21,12 @@ jobs:
       
       - name: Create source tarball
         run: |
-          mkdir bluechi-{{ github.ref }}
-          cp -r ./ bluechi-{{ github.ref }}
-          rm -rf ./bluechi-{{ github.ref }}/.git/
+          mkdir bluechi-${{ github.ref }}
+          cp -r ./ bluechi-${{ github.ref }}
+          rm -rf ./bluechi-${{ github.ref }}/.git/
 
-          zip -r bluechi-{{ github.ref }}.zip bluechi-{{ github.ref }}/
-          tar czf bluechi-{{ github.ref }}.tar.gz bluechi-{{ github.ref }}/
+          zip -r bluechi-${{ github.ref }}.zip bluechi-${{ github.ref }}/
+          tar czf bluechi-${{ github.ref }}.tar.gz bluechi-${{ github.ref }}/
 
       - name: Release
         uses: softprops/action-gh-release@v1
@@ -38,5 +38,5 @@ jobs:
           files: |
             meson_options.txt
             Makefile
-            bluechi-{{ github.ref }}.zip
-            bluechi-{{ github.ref }}.tar.gz
+            bluechi-${{ github.ref }}.zip
+            bluechi-${{ github.ref }}.tar.gz
