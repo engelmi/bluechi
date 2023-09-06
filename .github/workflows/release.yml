@@ -39,6 +39,7 @@ jobs:
           prerelease: true
           draft: true
           repository: engelmi/bluechi
+          token: ${{ secrets.PAT_CREATE_RELEASE }}
           files: |
             meson_options.txt
             Makefile
