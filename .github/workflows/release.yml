@@ -4,8 +4,8 @@ on:
   #push:
   #  tags:
   #    - 'v*.*.*'
-  pull_requests:
-
+  pull_request:
+    branches: [main]
 
 jobs:
   release:
