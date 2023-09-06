@@ -1,0 +1,42 @@
+name: Release BlueChi
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    name: Create GitHub release for BlueChi
+    runs-on: ubuntu-latest
+    container:
+      image: quay.io/bluechi/build-base:latest
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          submodules: 'true'
+      
+      - name: Create source tarball
+        run: |
+          mkdir bluechi-{{ github.ref }}
+          cp -r ./ bluechi-{{ github.ref }}
+          rm -rf ./bluechi-{{ github.ref }}/.git/
+
+          zip -r bluechi-{{ github.ref }}.zip bluechi-{{ github.ref }}/
+          tar czf bluechi-{{ github.ref }}.tar.gz bluechi-{{ github.ref }}/
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          generate_release_notes: true
+          prerelease: false
+          draft: true
+          files: |
+            meson_options.txt
+            Makefile
+            bluechi-{{ github.ref }}.zip
+            bluechi-{{ github.ref }}.tar.gz
