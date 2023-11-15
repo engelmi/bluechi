@@ -1,0 +1,30 @@
+name: Container Images
+
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        description: Name of the image to build and push to quay.io 
+        required: true
+        type: choice
+        options:
+        - build_base
+        - integration_test_base
+
+jobs:
+  build_container:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Quay login
+        run: |
+          echo ${{ secrets.QUAY_BOT_API_TOKEN }} | buildah login -u="bluechi+bluechi_bot" --password-stdin quay.io
+
+      - name: Build and push manifest
+        run: |
+          PUSH_MANIFEST=yes bash ./build-scripts/build-push-containers.sh ${{ inputs.image }}
