@@ -4,9 +4,7 @@
 # Important note: 
 # Run from root directory
 
-# Parse package version from the project
-meson setup builddir
-VERSION="$(meson introspect --projectinfo builddir | jq -r '.version')"
+VERSION_SCRIPT=$(dirname "$(readlink -f "$0")")/version.sh
 
 function python() {
     # Package python bindings
@@ -15,7 +13,7 @@ function python() {
 
     ## Set version and release
     sed \
-        -e "s|@VERSION@|${VERSION}|g" \
+        -e "s|@VERSION@|$(${VERSION_SCRIPT})|g" \
         < "setup.py.in" \
         > "setup.py"
 
