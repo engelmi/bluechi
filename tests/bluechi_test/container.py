@@ -74,9 +74,8 @@ class BluechiContainer():
         self.get_file(f"{coverage_file}", data_coverage_dir)
 
     def cleanup(self):
-        if self.container.status == 'running':
-            kw_params = {'timeout': 0}
-            self.container.stop(**kw_params)
+        kw_params = {'timeout': 0, 'ignore': True}
+        self.container.stop(**kw_params)
         self.container.remove()
 
     def exec_run(self, command: (Union[str, list[str]]), raw_output: bool = False, tty: bool = True) -> \
