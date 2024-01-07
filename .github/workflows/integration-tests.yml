@@ -108,7 +108,7 @@ jobs:
             cp -r $COVERAGE_DIR /var/tmp
             rm -rf $COVERAGE_DIR
           fi
-
+      
       - name: Upload tmt artifacts
         if: always()
         uses: actions/upload-artifact@v3
@@ -122,4 +122,10 @@ jobs:
         with:
           name: coverage-artifacts
           path: '/var/tmp/report'
+      
+      - name: Create comment with new code coverage
+        if: ${{ github.ref != 'refs/heads/main' }}
+        uses: romeovs/lcov-reporter-action@v0.2.16
+        with:
+          lcov-file: /var/tmp/tmt/run-001/plans/tier0/report/default-0/merged.info
 
