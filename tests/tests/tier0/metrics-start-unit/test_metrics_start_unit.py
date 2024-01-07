@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: LGPL-2.1-or-later
 
 import os
-import pytest
+# import pytest
 from typing import Dict
 
 from bluechi_test.config import BluechiControllerConfig, BluechiNodeConfig
@@ -26,7 +26,7 @@ def exec(ctrl: BluechiControllerContainer, nodes: Dict[str, BluechiNodeContainer
         raise Exception(output)
 
 
-@pytest.mark.skip(reason="lets see if the other tests fail")
+# @pytest.mark.skip(reason="lets see if the other tests fail")
 def test_metrics_start_unit(
         bluechi_test: BluechiTest,
         bluechi_ctrl_default_config: BluechiControllerConfig,
