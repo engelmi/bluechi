@@ -103,7 +103,6 @@ jobs:
         if: always()
         run: |
           COVERAGE_DIR="/var/tmp/tmt/run-001/plans/tier0/report/default-0/report/"
-          ls -la $COVERAGE_DIR
           if [ -d "$COVERAGE_DIR" ]; then
             cp -r $COVERAGE_DIR /var/tmp
             rm -rf $COVERAGE_DIR
@@ -127,5 +126,6 @@ jobs:
         if: ${{ github.ref != 'refs/heads/main' }}
         uses: romeovs/lcov-reporter-action@v0.2.16
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           lcov-file: /var/tmp/tmt/run-001/plans/tier0/report/default-0/merged.info
 
