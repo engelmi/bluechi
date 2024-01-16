@@ -10,7 +10,7 @@ environment:
     BLUECHI_IMAGE_NAME: bluechi-image
     CONTAINER_USED: integration-test-snapshot
     INSTALL_DEPS: no
-    LOG_LEVEL: INFO
+    LOG_LEVEL: DEBUG
     WITH_COVERAGE: 0
     WITH_VALGRIND: 0
 prepare:
