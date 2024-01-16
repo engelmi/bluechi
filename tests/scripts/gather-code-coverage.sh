@@ -17,4 +17,4 @@ SRC_DIR="/usr/src/debug/bluechi-${BC_VRA}/src"
 cp -r ${GCNO_DIR}/. ${GCDA_DIR}
 
 # Generate info file
-geninfo ${GCDA_DIR} -b ${SRC_DIR} -o ${INFO_FILE}
+lcov -c -d ${GCDA_DIR} -b ${SRC_DIR} -o ${INFO_FILE}
