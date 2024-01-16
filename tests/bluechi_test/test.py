@@ -78,6 +78,7 @@ class BluechiTest():
             if self.run_with_valgrind:
                 ctrl_container.enable_valgrind()
             if self.run_with_coverage:
+                ctrl_container.exec_run('cp -r /usr/share/bluechi-coverage/. /var/tmp/bluechi-coverage')
                 ctrl_container.exec_run('lcov -c -i -d /var/tmp/bluechi-coverage -o /var/tmp/base.info')
 
             ctrl_container.exec_run('systemctl start bluechi-controller')
@@ -99,6 +100,7 @@ class BluechiTest():
                 if self.run_with_valgrind:
                     node.enable_valgrind()
                 if self.run_with_coverage:
+                    node.exec_run('cp -r /usr/share/bluechi-coverage/. /var/tmp/bluechi-coverage')
                     node.exec_run('lcov -c -i -d /var/tmp/bluechi-coverage -o /var/tmp/base.info')
 
                 node.exec_run('systemctl start bluechi-agent')
