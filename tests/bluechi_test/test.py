@@ -77,6 +77,9 @@ class BluechiTest():
             ctrl_container = BluechiControllerContainer(c, self.bluechi_controller_config)
             if self.run_with_valgrind:
                 ctrl_container.enable_valgrind()
+            if self.run_with_coverage:
+                ctrl_container.exec_run('lcov -c -i -d /var/tmp/bluechi-coverage -o /var/tmp/base.info')
+
             ctrl_container.exec_run('systemctl start bluechi-controller')
             ctrl_container.wait_for_unit_state_to_be("bluechi-controller.service", "active")
 
@@ -95,6 +98,8 @@ class BluechiTest():
 
                 if self.run_with_valgrind:
                     node.enable_valgrind()
+                if self.run_with_coverage:
+                    node.exec_run('lcov -c -i -d /var/tmp/bluechi-coverage -o /var/tmp/base.info')
 
                 node.exec_run('systemctl start bluechi-agent')
                 node.wait_for_unit_state_to_be("bluechi-agent.service", "active")
