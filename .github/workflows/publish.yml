@@ -1,9 +1,9 @@
 name: Publish
 
 on:
-  push:
-    tags:
-      - 'v*.*.*'
+  pull_request:
+    branches: [main, hirte-*]
+  workflow_dispatch:
 
 jobs:
 
@@ -41,50 +41,12 @@ jobs:
 
           zip -r bluechi-${{ env.BLUECHI_VERSION }}.zip bluechi-${{ env.BLUECHI_VERSION }}/
           tar czf bluechi-${{ env.BLUECHI_VERSION }}.tar.gz bluechi-${{ env.BLUECHI_VERSION }}/
-      
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
+
+          ls -la
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
         with:
-          generate_release_notes: true
-          prerelea  se: false
-          draft: false
-          token: ${{ secrets.GH_RELEASE_TOKEN }}
-          files: |
-            bluechi-${{ env.BLUECHI_VERSION }}.zip
-            bluechi-${{ env.BLUECHI_VERSION }}.tar.gz
-            rpmbuild/SRPMS/*.src.rpm
-
-
-  pypipublish:
-    name: Publish bluechi on PyPi
-    runs-on: ubuntu-latest
-    container:
-      image: quay.io/bluechi/build-base:latest
-
-    steps:
-      - name: Checkout sources
-        uses: actions/checkout@v3
-        with:
-          submodules: 'true'
-
-      - name: Install dependencies
-        run: |
-          dnf install python3-gobject
-          python3 -m ensurepip --default-pip
-          python3 -m pip install --upgrade pip setuptools wheel build
-          python3 -m pip install -r src/bindings/generator/requirements.txt
-
-      - name: Generate python bindings
-        run: |
-          ./build-scripts/generate-bindings.sh python
-
-      - name: Build python bindings package
-        run: |
-          ./build-scripts/build-bindings.sh python
-
-      - name: Publish bluechi to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.PYPI_API_TOKEN }}
-          packages-dir: src/bindings/python/dist/
+          name: bluechi-${{ env.BLUECHI_VERSION }}.tar.gz
+          path: bluechi-${{ env.BLUECHI_VERSION }}.tar.gz
+          if-no-files-found: error
