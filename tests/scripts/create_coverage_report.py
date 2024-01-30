@@ -41,6 +41,11 @@ def exec(ctrl: BluechiControllerContainer, nodes: Dict[str, BluechiNodeContainer
     if result != 0:
         raise Exception(f"Error merging info files from each integration test: {output}")
 
+    result, output = ctrl.exec_run(
+        f"lcov --remove {merge_dir}/{file_path.name} -o {merge_dir}/{file_path.name} 'libbluechi/test/*'")
+    if result != 0:
+        raise Exception(f"Error removing unit test info from coverage: {output}")
+
     LOGGER.debug(f"Generating report for merged info file '{merge_dir}/{merge_file_name}'")
     result, output = ctrl.exec_run(f"genhtml {merge_dir}/{merge_file_name} --output-directory={report_dir_name}")
     if result != 0:
