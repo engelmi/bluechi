@@ -4,15 +4,15 @@ import os
 from typing import Dict
 
 from bluechi_test.test import BluechiTest
-from bluechi_test.container import BluechiControllerContainer, BluechiNodeContainer
-from bluechi_test.config import BluechiControllerConfig, BluechiNodeConfig
+from bluechi_test.machine import BlueChiControllerMachine, BlueChiAgentMachine
+from bluechi_test.config import BluechiControllerConfig, BlueChiAgentConfig
 
 
 node_name_foo = "node-foo"
 service_simple = "simple.service"
 
 
-def exec(ctrl: BluechiControllerContainer, nodes: Dict[str, BluechiNodeContainer]):
+def exec(ctrl: BlueChiControllerMachine, nodes: Dict[str, BlueChiAgentMachine]):
 
     nodes[node_name_foo].copy_systemd_service(
         service_simple, "systemd", os.path.join("/", "etc", "systemd", "system"))
@@ -26,12 +26,12 @@ def exec(ctrl: BluechiControllerContainer, nodes: Dict[str, BluechiNodeContainer
 def test_monitor_unsubscribe(
         bluechi_test: BluechiTest,
         bluechi_ctrl_default_config: BluechiControllerConfig,
-        bluechi_node_default_config: BluechiNodeConfig):
+        bluechi_node_default_config: BlueChiAgentConfig):
 
     bluechi_node_default_config.node_name = node_name_foo
     bluechi_ctrl_default_config.allowed_node_names = [bluechi_node_default_config.node_name]
 
-    bluechi_test.set_bluechi_controller_config(bluechi_ctrl_default_config)
-    bluechi_test.add_bluechi_node_config(bluechi_node_default_config)
+    bluechi_test.set_bluechi_ctrl_machine_config(bluechi_ctrl_default_config)
+    bluechi_test.add_bluechi_agent_machine_configs(bluechi_node_default_config)
 
     bluechi_test.run(exec)

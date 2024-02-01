@@ -4,30 +4,13 @@ import os
 from typing import Dict
 
 from bluechi_test.test import BluechiTest
-from bluechi_test.container import BluechiControllerContainer, BluechiNodeContainer
-from bluechi_test.config import BluechiControllerConfig, BluechiNodeConfig
+from bluechi_test.machine import BlueChiControllerMachine, BlueChiAgentMachine
+from bluechi_test.config import BluechiControllerConfig, BlueChiAgentConfig
 
 node_foo_name = "node-foo"
 
 
-def start_agent_in_ctrl_container(ctrl: BluechiControllerContainer):
-    assert ctrl.wait_for_unit_state_to_be("bluechi-controller", "active")
-
-    node_foo_config = BluechiNodeConfig(
-        file_name="agent.conf",
-        node_name=node_foo_name,
-        controller_host="localhost",
-        controller_port=ctrl.config.port,
-    )
-    ctrl.create_file(node_foo_config.get_confd_dir(), node_foo_config.file_name, node_foo_config.serialize())
-    result, _, wait_result = ctrl.systemctl_start_and_wait("bluechi-agent", 1)
-    assert result == 0
-    assert wait_result
-
-
-def exec(ctrl: BluechiControllerContainer, nodes: Dict[str, BluechiNodeContainer]):
-    start_agent_in_ctrl_container(ctrl)
-
+def exec(ctrl: BlueChiControllerMachine, nodes: Dict[str, BlueChiAgentMachine]):
     # bluechi-agent is running, check if it is connected in Agent
     result, output = ctrl.run_python(os.path.join("python", "is_agent_connected.py"))
     if result != 0:
@@ -44,8 +27,14 @@ def test_monitor_agent_loses_connection(
         bluechi_ctrl_default_config: BluechiControllerConfig):
 
     bluechi_ctrl_default_config.allowed_node_names = [node_foo_name]
+    node_foo_config = BlueChiAgentConfig(
+        file_name="agent.conf",
+        node_name=node_foo_name,
+        controller_host="localhost",
+        controller_port=bluechi_ctrl_default_config.port,
+    )
 
-    bluechi_test.set_bluechi_controller_config(bluechi_ctrl_default_config)
+    bluechi_test.set_bluechi_ctrl_machine_config(bluechi_ctrl_default_config, node_foo_config)
     # don't add node_foo_config to bluechi_test to prevent it being started
     # as separate container
     bluechi_test.run(exec)
