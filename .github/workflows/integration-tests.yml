@@ -110,24 +110,33 @@ jobs:
             rm -rf $MERGE_FILE
           fi
       
-      - name: Upload tmt artifacts
+      - name: Upload tmt artifacts to GitHub
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: tmt-artifacts
           path: '/var/tmp/tmt'
 
-      - name: Upload coverage HTML report
+      - name: Upload coverage HTML report to GitHub
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: coverage-artifacts-html
           path: '/var/tmp/report'
       
-      - name: Upload coverage file
+      - name: Upload coverage file to GitHub
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: coverage-artifacts-info
           path: '/var/tmp/merged.info'
+      
+      - name: Upload coverage to coveralls.io
+        if: always()
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          files: /var/tmp/merged.info
+          format: lcov
+
       
