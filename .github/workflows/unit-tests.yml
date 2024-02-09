@@ -53,6 +53,13 @@ jobs:
           files: ./builddir/meson-logs/coverage.info
           format: lcov
 
+      - name: Upload unit test info
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: unit-test-info
+          path: ./builddir/meson-logs/coverage.info
+
       - name: Upload unit test logs
         if: always()
         uses: actions/upload-artifact@v3
