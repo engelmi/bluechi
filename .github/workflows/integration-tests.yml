@@ -108,6 +108,7 @@ jobs:
             cp $MERGE_FILE /var/tmp
             rm -rf $COVERAGE_DIR
             rm -rf $MERGE_FILE
+            sed -i 's/\/var\/tmp\/bluechi-coverage\//\/__w\/bluechi\/bluechi\//' /var/tmp/merged.info
           fi
       
       - name: Upload coverage to coveralls.io
