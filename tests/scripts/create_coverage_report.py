@@ -45,6 +45,10 @@ def exec(ctrl: BluechiControllerContainer, nodes: Dict[str, BluechiNodeContainer
         f"lcov --remove {merge_dir}/{merge_file_name} -o {merge_dir}/{merge_file_name} '*/src/libbluechi/test/*'")
     if result != 0:
         raise Exception(f"Error removing coverage for unit test file: {output}")
+    result, output = ctrl.exec_run(
+        f"lcov --extract {merge_dir}/{merge_file_name} '*/bluechi-coverage/*' -o {merge_dir}/{merge_file_name}")
+    if result != 0:
+        raise Exception(f"Error extracting coverage only for bluechi: {output}")
 
     LOGGER.debug(f"Generating report for merged info file '{merge_dir}/{merge_file_name}'")
     result, output = ctrl.exec_run(f"genhtml {merge_dir}/{merge_file_name} --output-directory={report_dir_name}")
