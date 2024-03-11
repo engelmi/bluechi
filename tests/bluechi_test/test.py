@@ -272,6 +272,13 @@ class BluechiContainerTest(BluechiTest):
                     node.client.container.stop(**kw_params)
                 node.client.container.remove()
 
+        try:
+            self.podman_client.containers.prune()
+            self.podman_client.close()
+        except Exception as ex:
+            LOGGER.error(f"Failed to prune containers and close client: {ex}")
+            traceback.print_exc()
+
 
 class BluechiSSHTest(BluechiTest):
 

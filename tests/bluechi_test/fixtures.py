@@ -149,7 +149,7 @@ def run_with_coverage() -> bool:
     return _get_env_value('WITH_COVERAGE', 0) == '1'
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope='session')
 def podman_client() -> PodmanClient:
     """Returns the podman client instance"""
     # urllib3 produces too much information in DEBUG mode, which are not interesting for bluechi tests
