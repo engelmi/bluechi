@@ -1,0 +1,9 @@
+FROM docker.io/ubuntu:jammy as base
+
+RUN apt-get update && \
+    apt-get upgrade && \
+    apt-get install python3-dasbus \
+            systemd \
+            -y
+
+CMD [ "/usr/bin/systemd" ]

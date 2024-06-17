@@ -10,33 +10,32 @@ if want_man and not md2man.found()
 endif
 want_man = want_man and md2man.found()
 
-man1 = [
-  'bluechi-controller',
-  'bluechi-agent',
-  'bluechictl',
-  'bluechi-proxy',
-]
-
-man5 = [
-    'bluechi-controller.conf',
-    'bluechi-agent.conf',
-]
-
-man8 = [
-    'bluechi-controller-selinux',
-    'bluechi-agent-selinux'
-]
+mans = {
+  'bluechi-controller': [
+    'bluechi-controller.1',
+    'bluechi-controller.conf.5',
+    'bluechi-controller-selinux.8',
+  ],
+  'bluechi-agent': [
+    'bluechi-agent.1',
+    'bluechi-proxy.1',
+    'bluechi-agent.conf.5',
+    'bluechi-agent-selinux.8',
+  ],
+  'bluechictl': [
+    'bluechictl.1',
+  ],
+}
 
 if want_man
-  foreach pair : [[man1, '1'], [man5, '5'], [man8, '8']]
-    pages = pair[0]
-    section = pair[1]
-
-    foreach man : pages
+  foreach tag, man_files : mans
+    foreach man : man_files
+      message(man.substring(-1, 128) != '8')
+      if man.substring(-1, 128) != '8' or get_option('with_selinux')
         custom_target(
-          man + '.' + section,
-          input : [man + '.' + section + '.md'],
-          output : [man + '.' + section],
+          man,
+          input : [man + '.md'],
+          output : [man],
           command : [
             md2man,
             '-in', '@INPUT@',
@@ -44,8 +43,10 @@ if want_man
           ],
           build_by_default : true,
           install : true,
-          install_dir : get_option('mandir') / ('man' + section),
+          install_dir : get_option('mandir') / ('man' + man.substring(-1, 128)),
+          install_tag: tag,
         )
+      endif
     endforeach
   endforeach
 endif

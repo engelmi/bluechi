@@ -10,9 +10,16 @@ install_data(
         'org.eclipse.bluechi.Controller.xml',
         'org.eclipse.bluechi.Monitor.xml',
         'org.eclipse.bluechi.Node.xml',
+    ],
+    install_dir: join_paths(get_option('datadir'), 'dbus-1', 'interfaces'),
+    install_tag: 'bluechi-controller'
+)
+install_data(
+    [
         'org.eclipse.bluechi.Agent.xml'
     ],
     install_dir: join_paths(get_option('datadir'), 'dbus-1', 'interfaces'),
+    install_tag: 'bluechi-agent',
 )
 
 # Installing the DBus permission configuration files
@@ -30,10 +37,12 @@ configure_file(
     input: 'org.eclipse.bluechi.conf.in',
     configuration: conf,
     install_dir: dbus_service_dir,
+    install_tag: 'bluechi-controller'
 )
 configure_file(
     output: 'org.eclipse.bluechi.Agent.conf',
     input: 'org.eclipse.bluechi.Agent.conf.in',
     configuration: conf,
     install_dir: dbus_service_dir,
+    install_tag: 'bluechi-agent',
 )

@@ -35,7 +35,8 @@ executable(
   install: true,
   install_dir: join_paths(prefixdir, get_option('libexecdir')),
   c_args: common_cflags,
-  include_directories: include_directories('..')
+  include_directories: include_directories('..'),
+  install_tag: 'bluechi-controller'
 )
 
 # build test binaries

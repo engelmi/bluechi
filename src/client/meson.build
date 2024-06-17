@@ -28,5 +28,6 @@ executable(
   ],
   c_args: common_cflags,
   install: true,
-  include_directories: include_directories('..')
+  include_directories: include_directories('..'),
+  install_tag: 'bluechictl'
 )

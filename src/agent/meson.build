@@ -25,7 +25,8 @@ executable(
   c_args: common_cflags,
   include_directories: include_directories('..'),
   install: true,
-  install_dir: join_paths(prefixdir, get_option('libexecdir'))
+  install_dir: join_paths(prefixdir, get_option('libexecdir')),
+  install_tag: 'bluechi-agent'
 )
 
 # build test binaries
