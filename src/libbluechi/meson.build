@@ -32,6 +32,8 @@ libbluechi_src = [
     'service/shutdown.h',
     'socket.c',
     'socket.h',
+    'journal/journal.c',
+    'journal/journal.h',
 ]
 
 bluechi_lib = static_library('bluechi',

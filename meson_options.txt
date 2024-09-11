@@ -16,3 +16,6 @@ option('with_man_pages', type : 'boolean', value : true,
 option('with_selinux', type : 'boolean', value : true,
     description : 'Include the build and install of bluechi-selinux')
 
+option('flavor', type: 'combo', 
+    choices: ['dev', 'prod'], value: 'dev', 
+    description: 'The flavor ')
