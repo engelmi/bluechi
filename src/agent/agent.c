@@ -173,6 +173,7 @@ static int agent_heartbeat_timer_callback(sd_event_source *event_source, UNUSED 
                 bc_log_error("Agent connection attempt failed, retrying");
                 if (agent->register_call_slot != NULL) {
                         sd_bus_slot_unrefp(&agent->register_call_slot);
+                        agent->register_call_slot = NULL;
                 }
                 agent->connection_state = AGENT_CONNECTION_STATE_RETRY;
         }
@@ -2792,8 +2793,6 @@ static int agent_register_callback(sd_bus_message *m, void *userdata, UNUSED sd_
 }
 
 static bool agent_connect(Agent *agent) {
-        peer_bus_close(agent->peer_dbus);
-
         bc_log_infof("Connecting to controller on %s", agent->orch_addr);
         agent->connection_state = AGENT_CONNECTION_STATE_CONNECTING;
 
@@ -2821,7 +2820,7 @@ static bool agent_connect(Agent *agent) {
         sd_bus_error error = SD_BUS_ERROR_NULL;
         r = sd_bus_call_method_async(
                         agent->peer_dbus,
-                        NULL, // No slot needed since peer_dbus is closed on reconnect
+                        &agent->register_call_slot, // No slot needed since peer_dbus is closed on reconnect
                         BC_DBUS_NAME,
                         INTERNAL_CONTROLLER_OBJECT_PATH,
                         INTERNAL_CONTROLLER_INTERFACE,
@@ -2858,6 +2857,13 @@ static bool agent_reconnect(Agent *agent) {
                         bc_log_errorf("Failed to emit controller address property changed: %s", strerror(-r));
                 }
         }
+
+        if (agent->register_call_slot != NULL) {
+                sd_bus_slot_unref(agent->register_call_slot);
+                agent->register_call_slot = NULL;
+        }
+
+        peer_bus_close(agent->peer_dbus);
 
         return agent_connect(agent);
 }

@@ -82,8 +82,11 @@ int peer_bus_close(sd_bus *peer_dbus) {
                         bc_log_errorf("Failed to detach bus from event: %s", strerror(-r));
                         return r;
                 }
-
-                sd_bus_flush_close_unref(peer_dbus);
+                bc_log_info("closing bus");
+                sd_bus_close(peer_dbus);
+                bc_log_info("freeing bus");
+                sd_bus_unref(peer_dbus);
+                peer_dbus = NULL;
         }
 
         return 0;
