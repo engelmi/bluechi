@@ -23,7 +23,7 @@ def exec(ctrl: BluechiControllerMachine, _: Dict[str, BluechiAgentMachine]):
     assert ctrl.wait_for_unit_state_to_be("bluechi-controller.socket", "active")
 
     agent_config = BluechiAgentConfig(
-        file_name="agent.conf", controller_address="unix:path=/run/bluechi/bluechi.socket"
+        file_name="agent.conf", controller_address="unix:path=/run/bluechi/bluechi.sock"
     )
     ctrl.create_file(
         agent_config.get_confd_dir(),
